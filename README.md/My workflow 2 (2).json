@@ -1,0 +1,414 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-3-flash-preview",
+          "mode": "list",
+          "cachedResultName": "models/gemini-3-flash-preview"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are a LinkedIn ghostwriter for a student doing the #100DaysOfCode challenge in public. You write the BODY of today's post from their rough notes. Turn short notes into an engaging, genuine, first-person post that teaches something and shows growth.\n\nOutput exactly this shape and nothing else:\n\n<a one-line hook that makes people stop scrolling, based on today's topics>\n\nToday I learned:\n🔹 <topic 1>: <one sentence explaining what it is or why it matters, in simple words>\n🔹 <topic 2>: <...>\n(one bullet per topic from the notes, 2 to 4 bullets)\n\n💡 Key takeaway: <one insight or lesson connected to what they learned>\n\n<one short line on progress or what they plan to explore next, kept general>\nLooking forward to learning more! 💻\n\nRules:\n- 60 to 130 words total. Friendly, confident, beginner-honest tone. Short lines.\n- Fix spelling and grammar. Name technologies correctly (C, HTML, JavaScript, n8n, LinkedIn).\n- You may explain concepts and add general context, but never invent facts about the person: no fake projects, results, numbers, jobs, or experiences that are not in the notes.\n- Plain text only: no markdown, no asterisks, no hashtags, no links, no @mentions, no day number (those are added separately).\n\nExample notes: studied programming in C, HTML basics, how to create an automatic LinkedIn post uploading bot\nExample output:\nFrom low-level code to automation, all in one day!\n\nToday I learned:\n🔹 C programming: the language behind operating systems, great for understanding how code really runs.\n🔹 HTML basics: the structure behind every web page.\n🔹 LinkedIn automation: built a bot that drafts and uploads my daily post.\n\n💡 Key takeaway: automating small daily tasks frees up more time to actually learn.\n\nSteadily building my foundations, one day at a time.\nLooking forward to learning more! 💻"
+            },
+            {
+              "content": "={{ $json.data[\"Learned today\"] }}"
+            },
+            {}
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        672,
+        0
+      ],
+      "id": "c281dbff-478d-4bcf-a356-8d0d13038ab4",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "TQpEUXP6xXrCDUSu",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "person": "kPTOD27lTX",
+        "text": "=={{ $(\"Build post\").item.json.previewText }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [
+        1632,
+        -16
+      ],
+      "id": "c1fdb453-c8a9-4855-8216-0931d249b75e",
+      "name": "Create a post",
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "PHBcccI34rfJoHLp",
+          "name": "LinkedIn account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 3,
+              "triggerAtMinute": 25
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e505afb6-6d97-4fcc-b777-5ba1b3e13f5b",
+      "name": "Every Day"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c489bc7d-bf27-4cec-9c8c-ca61be973631",
+              "name": "ApproverEmail",
+              "value": "alameenpa92@gmail.com",
+              "type": "string"
+            },
+            {
+              "id": "1f79e1cc-e87e-4c3f-a57e-f37dcc1090a9",
+              "name": "StartDate",
+              "value": "2026-10-23",
+              "type": "string"
+            },
+            {
+              "id": "6d26cfd3-c9da-404e-a491-11c6d35f94b8",
+              "name": "TotalDays",
+              "value": 100,
+              "type": "number"
+            },
+            {
+              "id": "825d5e45-a8d8-40c0-8d8f-e739d133c857",
+              "name": "Hashtags",
+              "value": "#100DaysOfCode #BuildInPublic #BuildWithNor #AgenticAI #AIAgents #LearnInPublic #AIDevsIndia",
+              "type": "string"
+            },
+            {
+              "id": "0f3021d7-c57c-4037-b766-0b8fe66f7a0b",
+              "name": "MentionName",
+              "value": "norlabsai",
+              "type": "string"
+            },
+            {
+              "id": "d0342b91-7d31-4593-a537-065cb4d5e413",
+              "name": "MentionOrgUrn",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "73fb3c82-aa75-4a74-861c-b0fc63f48dcc",
+              "name": "PersonId",
+              "value": "ucacgYHuz3",
+              "type": "string"
+            },
+            {
+              "id": "f6be79e4-1d79-4b96-a0b9-2f2ac0821f11",
+              "name": "LinkedinVersion",
+              "value": "202608",
+              "type": "string"
+            },
+            {
+              "id": "0692cfbc-c447-440b-89ef-3cf4fdc0c259",
+              "name": "DayNumber",
+              "value": "={{ Math.floor($now.setZone('Asia/Kolkata').startOf('day').diff(DateTime.fromISO('2026-09-21', { zone: 'Asia/Kolkata' }), 'days').days) + 1 }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "9c483a67-ed55-4852-ae08-1d9d369850d9",
+      "name": "Post Settings"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "={{ $json.ApproverEmail }}",
+        "subject": "=Day {{ $json.dayNumber }}/{{ $json.totalDays }}: what did you learn today?",
+        "message": "=Hi! Time for your Day {{ $json.dayNumber }}/{{ $json.totalDays }} LinkedIn post.\n\nClick the button below and tell me what you learned today (and your code link, if you have one). I will turn it into a post and send it back for your approval.",
+        "responseType": "customForm",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Learned today",
+              "fieldType": "textarea",
+              "placeholder": "Learned programming in C",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Code link",
+              "placeholder": "https://github.com/..."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "bde63156-3011-45cf-941c-61ce05a5f610",
+      "name": "Ask What You Learned",
+      "webhookId": "6dc7b956-6f9b-4445-bcdd-087d04f6ae80",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "F1gOo7rGe6M9v7d1",
+          "name": "Gmail.P4 bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = $('Post Settings').item.json;\nconst answers = $('Ask What You Learned').item.json.data || {};\n\n// 🔎 Gemini item കണ്ടെത്തുക — 'content.parts' ഘടനയിലും\nconst allItems = $input.all().map(i => i.json);\nconst geminiItem = allItems.find(it =>\n  it.content?.parts\n);\n\n// 📝 Body എടുക്കൽ — എല്ലാ ഫോർമാറ്റുകളും support\nlet body = '';\n\nif (geminiItem?.content?.parts) {\n  // ✅ ഫോർമാറ്റ് 1: n8n Gemini node → { content: { parts: [{text}] } }\n  body = geminiItem.content.parts.map(p => p.text).filter(Boolean).join('\\n');\n} else if (Array.isArray(geminiItem?.candidates)) {\n  // ഫോർമാറ്റ് 2: raw API → { candidates: [{ content: { parts } }] }\n  const first = geminiItem.candidates[0];\n  body = first?.content?.parts?.map(p => p.text).filter(Boolean).join('\\n')\n      ?? first?.content?.[0]?.text ?? '';\n} else if (typeof geminiItem?.output === 'string') {\n  body = geminiItem.output;\n} else if (Array.isArray(geminiItem?.output)) {\n  body = geminiItem.output[0]?.text ?? String(geminiItem.output[0] ?? '');\n}\n\nbody = String(body).trim();\n\nconst link = String(answers['Code link'] || '').trim();\nconst header = `Day ${s.DayNumber}/${s.TotalDays} 🚀`;\nconst esc = (t) => t.replace(/[\\\\|{}@\\[\\]()<>#*_~]/g, (m) => '\\\\' + m);\n\nconst plain = [header, ''];\nif (body) plain.push(body, '');\nconst rich = [header, ''];\nif (body) rich.push(esc(body), '');\n\nif (link) {\n  plain.push('Code: ' + link, '');\n  rich.push('Code: ' + esc(link), '');\n}\n\nconst previewText = plain.join('\\n') + '\\n' + s.Hashtags + ' @' + s.MentionName;\n\nconst urn = String(s.MentionOrgUrn || '').trim();\nconst tag = urn && /^urn:li:organization:\\d+$/.test(urn)\n  ? `@[${s.MentionName}](${urn})`\n  : '\\\\@' + s.MentionName;\n\nconst commentary = rich.join('\\n') + '\\n' + s.Hashtags + ' ' + tag;\n\nreturn { DayNumber: s.DayNumber, previewText, commentary };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1008,
+        0
+      ],
+      "id": "10aa7b80-0b6e-427c-9a67-7b777b3e5732",
+      "name": "Build post"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "={{ $(\"Post Settings\").item.json.ApproverEmail }}",
+        "subject": "=Approve your Day {{ $json.dayNumber }} LinkedIn post",
+        "message": "=Here is your LinkedIn post for today:\n\n{{ $json.previewText }}\n\nApprove to publish it, or decline to skip today.",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double",
+            "approveLabel": "Approve & Post"
+          }
+        },
+        "options": {
+          "limitWaitTime": {
+            "values": {
+              "resumeUnit": "days"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1232,
+        0
+      ],
+      "id": "d9431fc5-d5e8-4525-86ff-4cb85afbe2cb",
+      "name": "Ask For Approval",
+      "webhookId": "b12dce6f-3fb9-4b8c-9174-df822049d92a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "F1gOo7rGe6M9v7d1",
+          "name": "Gmail.P4 bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a5196ef1-8ad3-4627-9d22-de55314e0fca",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1424,
+        0
+      ],
+      "id": "8ed409c1-2e48-4fa9-8be2-b47f4ad9a707",
+      "name": "Approved?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "158a369d-53b3-4ece-8f25-3daf58dae38c",
+              "leftValue": "={{ $json.wordcount }}",
+              "rightValue": 20,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1184,
+        -224
+      ],
+      "id": "5bbb8542-53b2-452e-b8db-aa43bbac9fdf",
+      "name": "If"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Build post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Every Day": {
+      "main": [
+        [
+          {
+            "node": "Post Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Settings": {
+      "main": [
+        [
+          {
+            "node": "Ask What You Learned",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ask What You Learned": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build post": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ask For Approval": {
+      "main": [
+        [
+          {
+            "node": "Approved?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approved?": {
+      "main": [
+        [
+          {
+            "node": "Create a post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Ask For Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "b88c6b4f-dc9f-4180-a8bb-532e8c469626",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e44825195ba64967452d6e9523a154f390028304b5781d0aa76a7a69c83bdd7c"
+  },
+  "nodeGroups": [],
+  "id": "M9zwN5unR0l04yl7",
+  "tags": []
+}
